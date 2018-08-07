@@ -230,6 +230,7 @@ public persistable enum ProductCategory {
 }
 
 public persistable interface Product {
+  // Id is created by default
 
   @Unique
   public name: string;
@@ -240,6 +241,14 @@ public persistable interface Product {
   public price: float32;
 
   public items: Item[];
+
+  /*
+    Translated into SQL query similar to:
+    SELECT COUNT(*) FROM items WHERE items.product_id = {self.id} AND items.purchase IS NULL AND items.store_id == {store.id}
+  */
+  public getQuantityInStore(self, store: Store): uint {
+    return self.items.filter(item => item.store == store & !item.purchased).count();
+  }
 }
 
 public func validate_address(address: string): Result<None, ValidationError> {
@@ -256,6 +265,11 @@ public persistable interface Store {
 
   public items: Item[];
   public purchases: Purchase[];
+
+  // can use product method to calculate
+  public getQuantityInStock(self, product: Product): uint {
+    return product.getQuantityInStore(self);
+  }
 }
 
 // Once a purchase is created, it cannot be modified
@@ -272,6 +286,10 @@ public persistable immutable interface Purchase {
 
   public get total(self): float32 {
     return sum(self.items[].product.price);
+  }
+
+  public hasProduct(self, product: Product): bool {
+    return any(self.items, (item: Item): bool => item.product == product);
   }
 
 }
