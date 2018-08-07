@@ -310,4 +310,31 @@ public persistable interface Item {
     }
   }
 }
+
+// Selector function
+public func selectProductNames(product: Product): {name: string }? {
+  return {
+    name: product.name,
+  };
+}
+
+// Creates a Subscription that is notified when that portion of the state changes
+public func subscribeToAllProductNames(state: State<Product>): Subscription<{ name: string }[]> {
+  return state.createSubscription(Selector.all(selectProductNames))
+}
+
+/**
+The anonymous function provided to subscription.handle function is called with the product names once and then on every change.
+
+While this example prints to stdout, one can imagine a function that updates React components, etc;
+*/
+func printProductNames(state: State<Product>): void {
+  let subscription = subscribeToAllProductNames(state);
+  subscription.handle((prodNames: { name: string }[]) => {
+    print('Received product names:');
+    prodNames.forEach(({name: string}) => print(`Product name: ${name}`));
+  });
+}
+
+
 ```
