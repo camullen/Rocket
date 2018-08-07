@@ -1,6 +1,12 @@
 # Rocket
 Rocket is a programming language proposal designed to allow programmers to define their application business logic and state management **once** for both the front-end and the back-end while abstracting away persistence details (e.g. database schema and queries). It is a statically typed, (mostly) functional, event-driven language with syntax and semantics similar to imperative languages.
 
+## Naming
+
+Rocket is named after my childhood dog who passed recently:
+
+![Alt text](rocket.jpg)
+
 ## Philosophy
 - Applications written in Rocket should focus exclusively on business logic and not worry about the normal plumbing that comes with developing a modern application stack.
 - Business logic and entity definitions should be written once, but accessible by the persistence layer, the application layer, and client applications.
