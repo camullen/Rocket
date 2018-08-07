@@ -222,7 +222,7 @@ Rocket is named after my childhood dog who passed recently:
 
 ## Examples
 
-```
+```typescript
 public persistable enum ProductCategory {
   Pants,
   Shirts,
@@ -330,11 +330,63 @@ While this example prints to stdout, one can imagine a function that updates Rea
 */
 func printProductNames(state: State<Product>): void {
   let subscription = subscribeToAllProductNames(state);
+
+  // Types can be defined inline
   subscription.handle((prodNames: { name: string }[]) => {
     print('Received product names:');
+
+    // allows object destructuring in function arguments
     prodNames.forEach(({name: string}) => print(`Product name: ${name}`));
+
+    // string interpolation is similar to javascript
   });
 }
 
+
+func sayHello(name: string): void {
+  print(`Hello ${name}`);
+}
+
+func sayHelloOptional(name: Optional<string>): void {
+  // Match semantics similar to rust;
+  let nametoPrint := match(name) {
+    Some(x): x;
+    None: 'Somebody';
+  }
+  print(`Hello ${nameToPrint}`);
+}
+
+// Equivalent to the above function
+func sayHelloOptionalQuestionMark(name: string?): void {
+  let nametoPrint := match(name) {
+    Some(x): x;
+    None: 'Somebody';
+  }
+  print(`Hello ${nameToPrint}`);
+}
+
+// Can provide default parameters. Effective parameter type is Optional<string>, so equivalent to the above optional functions
+func sayHelloWithDefault(name: string = 'Somebody'): void {
+  print(`Hello ${name}`);
+}
+
+// Demonstrates optional and default parameters
+func doSayHello(): void {
+  sayHello('Cameron') // OK prints Hello Cameron
+  sayHello(None) // !Error
+  sayHello() // !Error
+
+  sayHelloOptional('Cameron') // OK prints Hello Cameron
+  sayHelloOptional(None) // OK prints Hello Somebody
+  sayHelloOptional() // OK prints Hello Somebody
+
+  sayHelloOptionalQuestionMark('Cameron') // OK prints Hello Cameron
+  sayHelloOptionalQuestionMark(None) // OK prints Hello Somebody
+  sayHelloOptionalQuestionMark() // OK prints Hello Somebody
+
+  sayHelloWithDefault('Cameron') // OK prints Hello Cameron
+  sayHelloWithDefault(None) // OK prints Hello Somebody
+  sayHelloWithDefault() // OK prints Hello Somebody
+}
 
 ```
