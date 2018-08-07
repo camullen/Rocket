@@ -219,3 +219,77 @@ My plan is to write the language grammar / lexer in a format that will allow me 
 Rocket is named after my childhood dog who passed recently:
 
 ![Alt text](rocket.jpg)
+
+## Examples
+
+```
+public persistable enum ProductCategory {
+  Pants,
+  Shirts,
+  Shoes,
+}
+
+public persistable interface Product {
+
+  @Unique
+  public name: string;
+
+  public category: ProductCategory;
+
+  @GreaterThan(0)
+  public price: float32;
+
+  public items: Item[];
+}
+
+public func validate_address(address: string): Result<None, ValidationError> {
+  // Implementation
+}
+
+public persistable interface Store {
+
+  @Unique
+  public name: string;
+
+  @ValidationFunc(validate_address)
+  public address: string;
+
+  public items: Item[];
+  public purchases: Purchase[];
+}
+
+// Once a purchase is created, it cannot be modified
+public persistable immutable interface Purchase {
+  public customer_name: string;
+
+  // Customers don't have to provide an email, so Optional type
+  @Email
+  public customer_email: string?;
+
+  public items: []Item;
+
+  public store: Store;
+
+  public get total(self): float32 {
+    return sum(self.items[].product.price);
+  }
+
+}
+
+public persistable interface Item {
+  public product: Product;
+
+  //Syntactic sugar for Optional<Purchase>
+  public purchase: Purchase?;
+
+  public store: Store;
+
+  // Computed property - not stored, but memoized
+  public get purchased(self): bool {
+    match (self.purchase) {
+      Some(p: Purchase): return true;
+      None: return false;
+    }
+  }
+}
+```
