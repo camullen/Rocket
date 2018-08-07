@@ -1,12 +1,6 @@
 # Rocket
 Rocket is a programming language proposal designed to allow programmers to define their application business logic and state management **once** for both the front-end and the back-end while abstracting away persistence details (e.g. database schema and queries). It is a statically typed, (mostly) functional, event-driven language with syntax and semantics similar to imperative languages.
 
-## Naming
-
-Rocket is named after my childhood dog who passed recently:
-
-![Alt text](rocket.jpg)
-
 ## Philosophy
 - Applications written in Rocket should focus exclusively on business logic and not worry about the normal plumbing that comes with developing a modern application stack.
 - Business logic and entity definitions should be written once, but accessible by the persistence layer, the application layer, and client applications.
@@ -218,3 +212,10 @@ My current thinking for the semantics of the language is to borrow much of the s
 From an implementation standpoint, I plan to use a form of [persistent data structures](https://en.wikipedia.org/wiki/Persistent_data_structure) to achieve performant immutability, and reference counting for memory management. Furthermore, persistent types should implement some kind of Merkle tree creation to achieve the type of persistence that I specified in the philosophy. Therefore, circular references are problematic. As I work through the semantics and design of the language, the first implementation is likely going to be an interpreter written in TypeScript. My rationale for this is that the prototype will still be runnable in the browser and on the server side, but I'll have a degree of type safety in terms of the design of the interpreter.
 
 My plan is to write the language grammar / lexer in a format that will allow me to move away from Javascript, but not truly constrain me. So, my initial thinking is to write an EBNF grammar and use this node package to generate the lexer / parser (https://www.npmjs.com/package/ebnf-parser)
+
+
+## Why the name Rocket?
+
+Rocket is named after my childhood dog who passed recently:
+
+![Alt text](rocket.jpg)
